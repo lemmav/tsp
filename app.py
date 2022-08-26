@@ -15,13 +15,9 @@ def main():
     if request.method == 'POST':
         inputgraph = request.form['graph']
         r = requests.post('http://127.0.0.1:5001/graph', data=inputgraph)
+        return render_template('graph.html')
 
     return render_template('graph.html')
-
-@app.route("/result",methods=['GET'])
-def get():
-    return requests.get('http://127.0.0.1:5001/result')
-
 
 if __name__ == "__main__":
     app.run()  
