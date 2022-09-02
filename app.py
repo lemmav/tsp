@@ -8,7 +8,7 @@ from datetime import timedelta, datetime, timezone
 import requests
 import re, sqlite3
 app = Flask(__name__)
-connection = sqlite3.connect('tspdb.db')
+
 
 database_path = "createdbs.sqlite"
 
@@ -52,8 +52,8 @@ def create_db():
 
 def makeURL():
     domain="http://127.0.0.1:5000/"
-    ''.join(random.choices(string.ascii_letters + string.digits, k=10))
-    return domain
+    personalURL = ''.join(random.choices(string.ascii_letters + string.digits, k=10))
+    return personalURL
 
 @app.route("/graph",methods=['POST', 'GET'])
 def main():
@@ -62,14 +62,14 @@ def main():
         requests.post('http://127.0.0.1:5001/graph', data=inputgraph)
         while(True):
             url=makeURL()
-            infograph = query_db(r"SELECT * FROM queue WHERE url=?", (url, 1))
+            infograph = query_db(r"SELECT * FROM queue WHERE url=?", (url, ), True)
             if (infograph is None):
-                execute_db(r"INSERT INTO queue (url, graph, algorithm, requesttime) VALUES (?, ?, ?)",
+                execute_db(r"INSERT INTO queue (url, graph, algorithm, requesttime) VALUES (?, ?, ?, datetime('now', 'localtime'))",
                     (
                         url,
                         request.form['graph'],
                         request.form['algorithm'],
-                        datetime('now', 'localtime')
+                        
                     ))
                 break
         
