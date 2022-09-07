@@ -58,8 +58,7 @@ def makeURL():
 @app.route("/graph",methods=['POST', 'GET'])
 def main():
     if request.method == 'POST':
-        inputgraph = request.form['graph']
-        requests.post('http://127.0.0.1:5001/graph', data=inputgraph)
+        # inputgraph = request.form['graph']
         while(True):
             url=makeURL()
             infograph = query_db(r"SELECT * FROM queue WHERE url=?", (url, ), True)
