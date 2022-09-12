@@ -11,5 +11,6 @@ CREATE TABLE IF NOT EXISTS progress (
 CREATE TABLE IF NOT EXISTS result (
                                 url TEXT PRIMARY KEY UNIQUE,
                                 answer REAL NOT NULL,
+                                way TEXT NOT NULL,
                                 algorithm TEXT NOT NULL,
                                 executiontime TEXT NOT NULL);

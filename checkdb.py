@@ -47,7 +47,7 @@ def donecheck():
                     resultrequest_str = resultrequest.text
                     resultrequest_str = resultrequest_str.split('\n')
                     print(resultrequest_str[-1])
-                    cursor.execute("INSERT INTO result (url, answer, algorithm, executiontime) VALUES (?, ?, ?, datetime('now', 'localtime')) ", (progressrow['url'], resultrequest_str[-1], progressrow['algorithm']))
+                    cursor.execute("INSERT INTO result (url, answer, way, algorithm, executiontime) VALUES (?, ?, ?, ?, datetime('now', 'localtime')) ", (progressrow['url'], resultrequest_str[-1], resultrequest_str[1], progressrow['algorithm']))
                     cursor.execute("DELETE FROM progress WHERE url=?", (progressrow['url'],))
                     print("INSERTED INTO result and DELETED FROM progress")
                     sqlite_connection.commit()
