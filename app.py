@@ -7,6 +7,7 @@ import random, atexit
 from datetime import timedelta, datetime, timezone
 import requests
 import re, sqlite3
+from werkzeug.utils import redirect
 app = Flask(__name__)
 
 
@@ -70,9 +71,23 @@ def main():
                         request.form['algorithm'],
                         
                     ))
-                break
+                return redirect(url_for('urlka',url=url))
         
     return render_template('graph.html')
+
+@app.route('/graph/<url>',methods=['GET'])
+def urlka(url):
+    infographurl = query_db(r"SELECT * FROM progress WHERE url=?", (url, ), True)
+
+    if (infographurl is None):
+        execute_db(r"INSERT INTO queue (url, graph, algorithm, requesttime) VALUES (?, ?, ?, datetime('now', 'localtime'))",
+            (
+                url,
+                request.form['graph'],
+                request.form['algorithm'],
+                
+            ))
+    return render_template('url.html')
 
 if __name__ == "__main__":
     create_db()
