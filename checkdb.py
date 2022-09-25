@@ -1,6 +1,8 @@
 import sqlite3, datetime
-import time, requests
-algorithms = {'GA':'http://127.0.0.1:5001', 'BNN': 'http://127.0.0.1:5001', 'NN': 'http://127.0.0.1:5001'}
+import time, requests, json
+with open('init.json', 'r', encoding='utf-8') as fh: #открываем файл на чтение
+    algorithms = json.load(fh) #загружаем из файла данные в словарь data
+    
 def fromqueuetoprogress():
     try:
         sqlite_connection= sqlite3.connect('createdbs.sqlite', timeout=20)

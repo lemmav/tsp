@@ -5,11 +5,14 @@ from flask.helpers import url_for
 import bcrypt, base64
 import random, atexit
 from datetime import timedelta, datetime, timezone
-import requests
+import requests, json
 import re, sqlite3
 from werkzeug.utils import redirect
+
 app = Flask(__name__)
 
+with open('init.json', 'r', encoding='utf-8') as fh: #открываем файл на чтение
+    algorithms = json.load(fh) #загружаем из файла данные в словарь dat
 
 database_path = "createdbs.sqlite"
 
@@ -77,17 +80,19 @@ def main():
 
 @app.route('/graph/<url>',methods=['GET'])
 def urlka(url):
-    infographurl = query_db(r"SELECT * FROM progress WHERE url=?", (url, ), True)
-
-    if (infographurl is None):
-        execute_db(r"INSERT INTO queue (url, graph, algorithm, requesttime) VALUES (?, ?, ?, datetime('now', 'localtime'))",
-            (
-                url,
-                request.form['graph'],
-                request.form['algorithm'],
-                
-            ))
-    return render_template('url.html')
+    infographurlprogress = query_db(r"SELECT * FROM progress WHERE url=?", (url, ), True)
+    infographurlresult = None
+    if(infographurlprogress is not None):
+        algorithmurl = infographurlprogress['algorithm']
+        progressrequest = requests.get(algorithms[algorithmurl]+'/progress')
+        progress = progressrequest.text
+        print(progress)
+        
+    else:
+        infographurlresult = query_db(r"SELECT * FROM result WHERE url=?", (url, ), True)
+        progress=1
+    return render_template('url.html', infographurlresult = infographurlresult, progress=progress )
+    
 
 if __name__ == "__main__":
     create_db()
