@@ -18,6 +18,7 @@ def fromqueuetoprogress():
                 print("SELECTED FROM queue")
                 queuerow = cursor.fetchone()
                 if queuerow is not None:
+                    print(queuerow['graph'])
                     cursor.execute("INSERT INTO progress (url, graph, algorithm, starttime) VALUES (?, ?, ?, datetime('now', 'localtime')) ", (queuerow['url'], queuerow['graph'], queuerow['algorithm']))
                     cursor.execute("DELETE FROM queue WHERE url=?", (queuerow['url'],))
                     print("INSERTED INTO progress and DELETED FROM queue")
