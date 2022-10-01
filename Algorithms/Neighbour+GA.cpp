@@ -318,7 +318,7 @@ int main()
 			req = request;
 			NGATcond.notify_one();
 		}
-		else cout << "WE'RE BUSY NOW, YOU STUPID DUMBASS\n";
+		else cout << "WE'RE BUSY NOW\n";
 		});
 	svr.Get("/progress", [](const httplib::Request&, httplib::Response& res) {
 		string stringprogress = to_string(progress);
@@ -343,9 +343,6 @@ int main()
 		});
 	svr.listen("0.0.0.0", 5001);
 
-	//ofstream filetime("TSPGABNNS_time-N-ANOTHERONE.txt");
-	//ofstream filelongway("TSPGABNNS_longway-N-ANOTHERONE.txt");
-	cout << "what a dumbass";
 			
 
 		
