@@ -1,20 +1,19 @@
-import os, string
+import string
 from select import select
 from flask import Flask, g, request, session, render_template, abort
 from flask.helpers import url_for
-import bcrypt, base64
 import random, atexit
 from datetime import timedelta, datetime, timezone
 import requests, json
 import re, sqlite3
 from werkzeug.utils import redirect
 
-app = Flask(__name__)
+server = Flask(__name__)
 
-with open('init.json', 'r', encoding='utf-8') as fh: #открываем файл на чтение
+with open('./init.json', 'r', encoding='utf-8') as fh: #открываем файл на чтение
     algorithms = json.load(fh) #загружаем из файла данные в словарь dat
 
-database_path = "createdbs.sqlite"
+database_path = "/flask/createdbs.sqlite"
 
 def get_db():
     db = getattr(g, '_database', None)
@@ -23,7 +22,7 @@ def get_db():
         db.row_factory = sqlite3.Row
     return db
 
-@app.teardown_appcontext
+@server.teardown_appcontext
 def close_connection(exception):
     db = getattr(g, '_database', None)
     if db is not None:
@@ -44,11 +43,11 @@ def execute_db(query, args=()):
     get_db().commit()
 
 def create_db():
-    with app.app_context():
+    with server.app_context():
         db = get_db()
         cur = db.cursor()
 
-        with app.open_resource('createdbs.sql', 'r') as f:
+        with server.open_resource('createdbs.sql', 'r') as f:
             script = f.read()
             cur.executescript(script)
         cur.close()
@@ -59,7 +58,7 @@ def makeURL():
     personalURL = ''.join(random.choices(string.ascii_letters + string.digits, k=10))
     return personalURL
 
-@app.route("/graph",methods=['POST', 'GET'])
+@server.route("/graph",methods=['POST', 'GET'])
 def main():
     if request.method == 'POST':
         print(request.form['graph'])
@@ -78,7 +77,7 @@ def main():
         
     return render_template('graph.html')
 
-@app.route('/graph/<url>',methods=['GET'])
+@server.route('/graph/<url>',methods=['GET'])
 def urlka(url):
     infographurlprogress = query_db(r"SELECT * FROM progress WHERE url=?", (url, ), True)
     infographurlresult = None
@@ -93,10 +92,10 @@ def urlka(url):
         progress=1
     return render_template('url.html', infographurlresult = infographurlresult, progress=progress )
     
-
-if __name__ == "__main__":
-    create_db()
-    app.run()  
+create_db()
+# if __name__ == "__main__":
+#     create_db()
+#     app.run()  
 
 
 

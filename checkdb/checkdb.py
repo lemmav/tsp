@@ -4,11 +4,12 @@ with open('init.json', 'r', encoding='utf-8') as fh: #открываем фай�
     algorithms = json.load(fh) #загружаем из файла данные в словарь data
     
 def fromqueuetoprogress():
+    sqlite_connection = None
     try:
-        sqlite_connection= sqlite3.connect('createdbs.sqlite', timeout=20)
+        sqlite_connection= sqlite3.connect('/checkdb/createdbs.sqlite', timeout=20)
         sqlite_connection.row_factory = sqlite3.Row
         cursor = sqlite_connection.cursor()
-        print("Подключен к SQLite")
+        print("fromqueuetoprogress Подключен к SQLite")
         for algorithm in algorithms.keys():
             cursor.execute("SELECT * FROM progress WHERE algorithm=?", (algorithm,))
             progressrow = cursor.fetchone()
@@ -27,7 +28,7 @@ def fromqueuetoprogress():
         cursor.close()
 
     except sqlite3.Error as error:
-        print("Ошибка при подключении к sqlite", error)
+        print("fromqueuetoprogress Ошибка при подключении к sqlite", error)
     finally:
         if (sqlite_connection):
             sqlite_connection.close()
@@ -35,10 +36,10 @@ def fromqueuetoprogress():
 
 def donecheck():
     try:
-        sqlite_connection= sqlite3.connect('createdbs.sqlite', timeout=20)
+        sqlite_connection= sqlite3.connect('/checkdb/createdbs.sqlite', timeout=20)
         sqlite_connection.row_factory = sqlite3.Row
         cursor = sqlite_connection.cursor()
-        print("Подключен к SQLite")
+        print("donecheck Подключен к SQLite")
         for algorithm in algorithms.keys():
             cursor.execute("SELECT * FROM progress WHERE algorithm=?", (algorithm,))
             progressrow = cursor.fetchone()
@@ -58,7 +59,7 @@ def donecheck():
         cursor.close()
 
     except sqlite3.Error as error:
-        print("Ошибка при подключении к sqlite", error)
+        print("donecheck Ошибка при подключении к sqlite", error)
     finally:
         if (sqlite_connection):
             sqlite_connection.close()
