@@ -1,0 +1,73 @@
+version: '3'
+
+services:
+
+  flask:
+    container_name: flask
+    restart: always
+    build: /home/lemmav/diplom/tsp-main
+    ports:
+      - "8000:8000"
+    command: gunicorn -w 1 -b 0.0.0.0:8000 wsgi:server
+    volumes:
+      - /home/lemmav/diplom/dbdir:/flask
+
+  nginx:
+    container_name: nginx
+    restart: always
+    build: /home/lemmav/diplom/nginx
+    ports:
+      - "80:80"
+    depends_on:
+      - flask
+
+  bnb:
+    container_name: bnb
+    restart: always
+    build: /home/lemmav/diplom/tsp-main/Algorithms/bnb
+    depends_on:
+      - nginx
+  bnn:
+    container_name: bnn
+    restart: always
+    build: /home/lemmav/diplom/tsp-main/Algorithms/bnn
+    depends_on:
+      - nginx
+  ga:
+    container_name: ga
+    restart: always
+    build: /home/lemmav/diplom/tsp-main/Algorithms/ga
+    depends_on:
+      - nginx
+  nga:
+    container_name: nga
+    restart: always
+    build: /home/lemmav/diplom/tsp-main/Algorithms/nga
+    depends_on:
+      - nginx
+  nn:
+    container_name: nn
+    restart: always
+    build: /home/lemmav/diplom/tsp-main/Algorithms/nn
+    depends_on:
+      - nginx
+
+  checkdb:
+    container_name: checkdb
+    restart: always
+    build: /home/lemmav/diplom/tsp-main/checkdb
+    volumes:
+      - /home/lemmav/diplom/dbdir:/checkdb
+    depends_on:
+      - nginx
+
+volumes:
+  dbdir:
+  
+networks:
+  webnet:
+    driver:
+      bridge
+
+  
+
