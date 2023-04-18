@@ -1,3 +1,6 @@
+gunicorn
+Flask
+pyyaml
 pysqlite3
 requests
 kubernetes

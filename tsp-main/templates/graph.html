@@ -5,20 +5,28 @@
   <meta charset="UTF-8">
   <meta http-equiv="X-UA-Compatible" content="IE=edge">
   <meta name="viewport" content="initial-scale=1.0">
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.3/jquery.min.js"></script>
+  <link rel="stylesheet" type="text/css" href="/static/graph.css">
+  <script src="/static/graph.js"></script>
+  <script>
+    let main_url = "{{ url_for('main')}}";
+  </script>
 {%endblock%}
 </head>
 <body>
-  <header>
     <div id="graph-form">
-        <form action="{{ url_for('main')}}" method="post">
-            <p><textarea name="graph"></textarea></p>
+      <p><input id="size" name="size" type="number" value="5" min="2" max="50"> Размер </p>
+      <p>
+        <table id="graph-table"></table>
+      </p>
+        <form id="graph-form-main">
             <p><input name="algorithm" type="radio" value="GA+NN"> Genetic algorithm + NearestNeighbour </p>
             <p><input name="algorithm" type="radio" value="GA"> Genetic algorithm </p>
             <p><input name="algorithm" type="radio" value="BnB"> Branch and Bound </p>
             <p><input name="algorithm" type="radio" value="NN"> Best Nearest neighbour </p>
             <p><input name="algorithm" type="radio" value="BNN"> Nearest neighbour </p>
 
-            <input type="submit">
+            <input id="submit-btn" type="submit">
         </form>
     </div>
 

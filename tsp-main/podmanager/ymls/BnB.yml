@@ -1,0 +1,17 @@
+apiVersion: v1
+kind: Pod
+metadata:
+  name: minibnb
+  labels:
+    app: minibnb
+spec:
+  containers:
+    - name: minibnb
+      image: docker.io/lemmav/minibnb
+      imagePullPolicy: IfNotPresent
+      ports:
+      - containerPort: 5003
+
+
+
+        

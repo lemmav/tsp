@@ -1,7 +1,7 @@
 {
-    "GA+NN": "http://nga:5001", 
-    "GA": "http://ga:5002", 
-    "BnB": "http://bnb:5003",
-    "NN": "http://nn:5004",
-    "BNN": "http://bnn:5005"
+    "GA+NN": "http://mininga-service:5001", 
+    "GA": "http://miniga-service:5002", 
+    "BnB": "http://minibnb-service:5003",
+    "NN": "http://mininn-service:5004",
+    "BNN": "http://minibnn-service:5005"
 }

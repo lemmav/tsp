@@ -1,0 +1,30 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: miniga-service
+spec:
+  selector:
+    app: miniga
+  ports:
+    - protocol: "TCP"
+      port: 5002
+      targetPort: 5002
+  type: LoadBalancer
+---
+apiVersion: v1
+kind: Pod
+metadata:
+  name: miniga
+  labels:
+    app: miniga
+spec:
+  containers:
+    - name: miniga
+      image: docker.io/lemmav/miniga
+      imagePullPolicy: IfNotPresent
+      ports:
+      - containerPort: 5002
+
+
+
+        

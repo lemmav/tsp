@@ -132,7 +132,7 @@ Direction MaxCostForRejection(const Graph& graph, double& maxAssessment) { //в�
 					maxAssessment = INFINITY;
 					return direction;
 				}
-				if (assessment > maxAssessment) {
+				if (assessment >= maxAssessment) {
 					maxAssessment = assessment;
 					maxi = i;
 					maxj = j;
@@ -218,6 +218,8 @@ void GraphReader(Graph& graph, int& N, const httplib::Request& req) {
 double mainresult;
 TreeNode temporaryNode;
 void NGA() {
+	progress = 0.0;
+
 	int count = 0;
 	double di = 0, dj = 0;
 	Graph graph;
@@ -247,6 +249,7 @@ void NGA() {
 	for (int i = 0; i < N; i++) {
 		cout << temporaryNode.way[i] << "   ";
 	}
+	Nodes = priority_queue<TreeNode>(); // Почистить Nodes, потому что она глобальная переменная и ее никто не чистил
 
 }
 std::condition_variable NGATcond;
@@ -261,6 +264,17 @@ void NGAThread()
 		NGA();
 		busyornot = false;
 	}
+}
+
+string WayToString(Way w) {
+	string result = "0 ";
+	int current = w[0];
+	while (current != 0) {
+		result += to_string(current) + " ";
+		current = w[current];
+	}
+	result += "0";
+	return result;
 }
 
 int main()
@@ -286,12 +300,7 @@ int main()
 			res.set_content("0", "text/plain");
 		}
 		else {
-			string stringresult = "1\n";
-			stringresult += "0 ";
-			for (int i = 0; i < temporaryNode.way.size(); i++) {
-				stringresult += to_string(temporaryNode.way[i]) + " ";
-			}
-			stringresult += " 0";
+			string stringresult = "1\n" + WayToString(temporaryNode.way);
 			stringresult += "\n" + to_string(temporaryNode.cost);
 
 

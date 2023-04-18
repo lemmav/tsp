@@ -1,0 +1,30 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: mininn-service
+spec:
+  selector:
+    app: mininn
+  ports:
+    - protocol: "TCP"
+      port: 5004
+      targetPort: 5004
+  type: LoadBalancer
+---
+apiVersion: v1
+kind: Pod
+metadata:
+  name: mininn
+  labels:
+    app: mininn
+spec:
+  containers:
+    - name: mininn
+      image: docker.io/lemmav/mininn
+      imagePullPolicy: IfNotPresent
+      ports:
+      - containerPort: 5004
+
+
+
+        

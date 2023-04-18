@@ -12,9 +12,9 @@ server = Flask(__name__)
 
 with open('./init.json', 'r', encoding='utf-8') as fh: #открываем файл на чтение
     algorithms = json.load(fh) #загружаем из файла данные в словарь dat
-
-database_path = "/flask/createdbs.sqlite"
-
+podmanager = "http://podmanager-service:8001" 
+database_path = "/dbdir/createdbs.sqlite"
+# database_path = "createdbs.sqlite"
 def get_db():
     db = getattr(g, '_database', None)
     if db is None:
@@ -54,7 +54,6 @@ def create_db():
         db.commit()
 
 def makeURL():
-    domain="http://127.0.0.1:5000/"
     personalURL = ''.join(random.choices(string.ascii_letters + string.digits, k=10))
     return personalURL
 
@@ -83,11 +82,16 @@ def urlka(url):
     infographurlresult = None
     if(infographurlprogress is not None):
         algorithmurl = infographurlprogress['algorithm']
-        progressrequest = requests.get(algorithms[algorithmurl]+'/progress')
+        print("I'm almost requests.get")
+        # в podmanager
+        params={"url": url, "algorithm":algorithmurl}
+
+        progressrequest = requests.get(podmanager+'/progress', params=params)
         progress = progressrequest.text
         print(progress)
         
     else:
+        print ("else progress not found")
         infographurlresult = query_db(r"SELECT * FROM result WHERE url=?", (url, ), True)
         progress=1
     return render_template('url.html', infographurlresult = infographurlresult, progress=progress )
